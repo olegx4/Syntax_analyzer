@@ -31,16 +31,20 @@ int main()
 	map<char, int> tokensPriority = {
 		{'*',1},
 		{'/',1},
+		{'%',1},
 		{'+',2},
 		{'-',2},
 		{ '<',3},
 		{ '>',3},
-		{')', 5}
+		{ '<=',3},
+		{ '>=',3},
+		{ '==',4},
+		{ '!=',4},
+		{'&&', 5},
+		{'||', 6},
+		{')', 7},
 	};
 	map<char, int>::iterator it;
-
-
-
 	
 	int count = 0;
 	ifstream fin("synt.txt");
@@ -57,7 +61,6 @@ int main()
 				while (isalpha(str[i])) {
 					actualToken += str[i];
 					i++;
-					
 				}
 				while (str[i] != ';' && ispunct(str[i])) {
 					actualTokenOfAction += str[i];
@@ -67,54 +70,45 @@ int main()
 				
 				if (count != 0)
 					i -= 2;
-
-			}
-			else if (pairsToAction) {
-				if (previousPriority > actualPriority) {
-					tokens.push(previousToken);
-					tokens.push(previousTokenOfAction);
-					previousToken = actualToken;
-					actualToken.erase();
-					previousTokenOfAction = actualTokenOfAction;
-					actualTokenOfAction.erase();
-					previousPriority = actualPriority;
-					actualPriority = NULL;
+				if (str[i] != ' ')
+				{
 					i--;
 				}
+			}
+			else if (pairsToAction) { //Якщо є три необхідних лексеми для порівняння
+				if (previousPriority > actualPriority) { //Порівняння пріоритетів
+					tokens.push(previousToken); //Якщо перевищує, то закинути у стек попередні лексеми 
+					tokens.push(previousTokenOfAction); //--++---
+					previousToken = actualToken; //На місце попередніх переміщуються ті, які були активними
+					actualToken.erase(); //--++---
+					previousTokenOfAction = actualTokenOfAction; //заміна активних лексем дії
+					actualTokenOfAction.erase(); //очистка актуальних
+					previousPriority = actualPriority; //оновлення пріоритету для попередніх лексем
+					actualPriority = NULL; //очистка пріоритету для актуальних
+					i--; // для того, заміна лексем не забирала ітерацію пошуку 
+				}
 				else {
-					buffer = previousToken + previousTokenOfAction + actualToken;
-					cout << buffer << endl;
-					//tokens.push(actualTokenOfAction);
+					buffer = previousToken + previousTokenOfAction + actualToken; //формування виконання дій, якщо операція не перевищує по пріоритету дану
+					cout << buffer << endl; //Виведення поточної дії
 					if (!tokens.empty()) {
 						previousTokenOfAction = tokens.top();
-
 						previousPriority = tokensPriority.find(previousTokenOfAction[0])->second;
 						tokens.pop();
-
 						previousToken = tokens.top();
 						tokens.pop();
 						actualToken = buffer;
 					}
 					else {
-						actualToken = buffer;
-						/*tokens.push(actualToken);
-						actualToken.erase();
-						tokens.push(actualTokenOfAction);
-						actualTokenOfAction.erase();*/
-						previousToken.erase();
+						actualToken = buffer; //для зберігання виконаних дій 
+						previousToken.erase(); //якщо стек пустий потрібно очистити попередні лексеми
 						previousTokenOfAction.erase();
 
 					}
-
-
 					i--;
-
-
-					//i--;
 				}
-
 			}
-			else if (!actualToken.empty() && !actualTokenOfAction.empty()) {
+			else if (!actualToken.empty() && !actualTokenOfAction.empty()) { //запис актуальних лексем у попередні для вивільнення 
+							//місця новим актуальним лексемам
 				previousToken = actualToken;
 				actualToken.erase();
 				previousTokenOfAction = actualTokenOfAction;
