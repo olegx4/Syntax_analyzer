@@ -1,1 +1,2 @@
-a * b - f + c * d )
+k-a/b*f+p+c*d)
+k - a / b * f + p + c * d )

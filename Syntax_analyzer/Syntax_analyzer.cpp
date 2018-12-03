@@ -23,11 +23,13 @@ void writeToFile(string input)
 
 int main()
 {
+	//writeToFile(str);
+	//readFromFile(str);
 	string str, buffer, actualToken, previousToken, actualTokenOfAction, previousTokenOfAction = ""; // "if(a + b * c > d );"
 	stack<string> tokens;
 	int previousPriority, actualPriority;
-	map<char, int> tokensPriority = { 
-		{'*',1}, 
+	map<char, int> tokensPriority = {
+		{'*',1},
 		{'/',1},
 		{'+',2},
 		{'-',2},
@@ -36,36 +38,26 @@ int main()
 		{')', 5}
 	};
 	map<char, int>::iterator it;
-	
-	
 
-	//writeToFile(str);
-	//readFromFile(str);
+
+
+	
 	int count = 0;
 	ifstream fin("synt.txt");
-	while (getline(fin, str)){
+	while (getline(fin, str)) {
 		for (int i = 0; i < str.length(); i++) {
-			bool pairsToAction = /*!actualToken.empty() &&*/
+			bool pairsToAction =
 				!actualTokenOfAction.empty() &&
 				!previousToken.empty() &&
 				!previousTokenOfAction.empty();
-			bool twopairs = actualToken.empty() &&
-				actualTokenOfAction.empty() &&
-				previousToken.empty() &&
-				previousTokenOfAction.empty();
-			/*if (!tokens.empty() &&  twopairs)
-			{
-				previousToken = tokens.top();
-				tokens.pop();
-				previousTokenOfAction = tok
-				
-			}*/
+
 			if (actualToken.empty() || actualTokenOfAction.empty()) {
 				if (str[i] == ')')
 					count++;
 				while (isalpha(str[i])) {
 					actualToken += str[i];
 					i++;
+					
 				}
 				while (str[i] != ';' && ispunct(str[i])) {
 					actualTokenOfAction += str[i];
@@ -74,35 +66,36 @@ int main()
 				}
 				
 				if (count != 0)
-					i-=2;
-				
+					i -= 2;
+
 			}
-			else if (pairsToAction)
-			{
-				if (previousPriority > actualPriority)
-				{
-					tokens.push(previousToken); 
+			else if (pairsToAction) {
+				if (previousPriority > actualPriority) {
+					tokens.push(previousToken);
 					tokens.push(previousTokenOfAction);
 					previousToken = actualToken;
 					actualToken.erase();
 					previousTokenOfAction = actualTokenOfAction;
 					actualTokenOfAction.erase();
+					previousPriority = actualPriority;
+					actualPriority = NULL;
 					i--;
 				}
-				else
-				{
+				else {
 					buffer = previousToken + previousTokenOfAction + actualToken;
 					cout << buffer << endl;
 					//tokens.push(actualTokenOfAction);
 					if (!tokens.empty()) {
 						previousTokenOfAction = tokens.top();
+
+						previousPriority = tokensPriority.find(previousTokenOfAction[0])->second;
 						tokens.pop();
+
 						previousToken = tokens.top();
 						tokens.pop();
 						actualToken = buffer;
 					}
-					else
-					{
+					else {
 						actualToken = buffer;
 						/*tokens.push(actualToken);
 						actualToken.erase();
@@ -112,14 +105,14 @@ int main()
 						previousTokenOfAction.erase();
 
 					}
-					
+
 
 					i--;
-					
-					
+
+
 					//i--;
 				}
-				
+
 			}
 			else if (!actualToken.empty() && !actualTokenOfAction.empty()) {
 				previousToken = actualToken;
@@ -127,9 +120,10 @@ int main()
 				previousTokenOfAction = actualTokenOfAction;
 				previousPriority = actualPriority;
 				actualTokenOfAction.erase();
+				actualPriority = NULL;
 				i--;
 			}
-			
+
 		}
 	}
 	fin.close();
