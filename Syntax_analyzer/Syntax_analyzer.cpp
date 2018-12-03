@@ -14,9 +14,21 @@ void writeToFile(string input)
 	fout.close();
 }
 
+void readFromFile(string output)
+{
+	ifstream fin("synt.txt");
+	while (getline(fin, output))
+	{
+		cout << output << endl;
+	}
+	fin.close();
+}
+
 int main()
 {
-	string str = "if(a + b * c > d );";
-	writeToFile(str);
+	string str = ""; // "if(a + b * c > d );";
+	//writeToFile(str);
+	readFromFile(str);
+
 }
 
