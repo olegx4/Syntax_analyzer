@@ -1,2 +1,4 @@
-kaa-a/b  || f+ p>=c*  d+h )
-k - a / b * f + p + c * d )
+(kaa-a/b * f+ p*c +  (d-h)*z )
+(kaa-(a/b) * f || p*c +  (d-h)*z )
+(kaa-a/b *  (f+ p*c) +  (d-h)*z )
+(a+b*w)
