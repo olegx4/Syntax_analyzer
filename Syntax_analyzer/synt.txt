@@ -1,1 +1,7 @@
-if(k - a / b * f + p * c + d - h*z)
+
+
+if( kaa-(a/b) * f || p*c +  (d-h)*z )
+if( kaa-a/b *  (f+ p*c) +  (d-h)*z )
+if( a+b*w)
+if( k - a - ( b * f ) * p * c + (d - h)*z)
+if( kaa-a/b * f+ p*c +  (d-h)*z )
