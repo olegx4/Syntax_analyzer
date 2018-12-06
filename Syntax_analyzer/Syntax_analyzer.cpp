@@ -37,12 +37,13 @@ void main()
 		{"&&", 5},
 		{"||", 6}
 	};
-	//map<char, int>::iterator it;
 
-	int count = 0;
+	int i = 0;
 	ifstream fin("synt.txt");
 	while (getline(fin, str)) {
-		for (int i = 0; i < str.length(); i++) {
+		i = str.find('(');
+		i++;
+		for (i = i; i < str.length(); i++) {
 			bool pairsToAction =
 				!actualTokenOfAction.empty() &&
 				!previousToken.empty() &&
@@ -100,24 +101,6 @@ void main()
 					i--;
 				}
 
-
-				/*else {
-					buffer = previousToken + previousTokenOfAction + actualToken;
-					cout << buffer << endl;
-					actualToken = buffer;
-					if (!tokens.empty()) {
-						previousTokenOfAction = tokens.top();
-						previousPriority = tokensPriority.find(previousTokenOfAction)->second;
-						tokens.pop();
-						previousToken = tokens.top();
-						tokens.pop();
-					}
-					else {
-						previousToken.erase();
-						previousTokenOfAction.erase();
-					}
-					i--;
-				}*/
 			}
 			else if (!actualToken.empty() && !actualTokenOfAction.empty()) {
 				previousToken = actualToken;
