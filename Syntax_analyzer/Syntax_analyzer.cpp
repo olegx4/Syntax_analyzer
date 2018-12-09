@@ -37,8 +37,6 @@ map<string, int> tokensPriority = {
 
 void parser(string str, int &i)
 {
-	//stack<string> tokens;
-
 	string   previousToken, previousTokenOfAction = "";
 	if (str[i] != '(')
 	{
@@ -107,11 +105,14 @@ void parser(string str, int &i)
 				buffer = previousToken + previousTokenOfAction + actualToken;
 				cout << buffer << endl;
 				actualToken = buffer;
+				/*if(str[i]==')')
+					actualToken = "(" + actualToken + ")";*/
 				if (!tokens.empty() && tokens.top() == "(")
 				{
 					tokens.pop();
 					tokens.pop();
 					tokens.pop();
+					actualToken = "(" + actualToken + ")";
 					i++;
 					return;
 				}
@@ -123,11 +124,13 @@ void parser(string str, int &i)
 					tokens.pop();
 				}
 				else {
-
 					previousToken.erase();
 					previousTokenOfAction.erase();
 					if (str[i] == ')')
+					{
+						cout << str << "\n\n";
 						return;
+					}
 				}
 				i--;
 			}
@@ -153,7 +156,6 @@ void parser(string str, int &i)
 			actualPriority = NULL;
 			i--;
 		}
-
 	}
 }
 
@@ -161,14 +163,18 @@ void main()
 {
 
 
-
+	int count = 1;
 	ifstream fin("synt.txt");
+	 
 	while (getline(fin, str)) {
+		cout << "Expression: " << count << endl;
 		actualToken.erase();
 		actualTokenOfAction.erase();
 		int i = 0;
 		parser(str, i);
+		count++;
 	}
+	
 	fin.close();
 
 }
